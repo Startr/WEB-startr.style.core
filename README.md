@@ -33,7 +33,7 @@ values auto-update.
 ## Subtree integration
 
 This repo is embedded into
-[WEB-Startr.Style](https://github.com/Startr/WEB-Startr.Style) as a
+[Startr.Style](https://github.com/Startr/Style/) as a
 git subtree at `src/style-core/`. From that repo:
 
 ```bash

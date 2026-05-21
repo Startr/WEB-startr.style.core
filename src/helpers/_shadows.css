@@ -1,5 +1,13 @@
 /* Shadow Helpers */
 
+/* TODO: Inset shadows don't play well with other shadows. When combining
+   --shadow-inset with --shadow or --shadow-hvr, the later box-shadow declaration
+   overwrites the earlier one instead of composing them. Each selector sets
+   box-shadow independently, so e.g. hovering on an element with both --shadow-inset
+   and --shadow-hvr loses the inset shadow entirely. Needs a compositing approach
+   (e.g. combining values into a single box-shadow list).
+   Discovered on sage.is/hardware configurator. */
+
 [style*="--levitate:"] {
     box-shadow: 0 calc(var(--levitate) * .5px) calc(var(--levitate) * .6px) rgba(0,0,0,calc(var(--levitate) * .013)), 
                 0 calc(var(--levitate) * 1px) calc(var(--levitate) * 1.2px) rgba(0,0,0,calc(var(--levitate) * .013)), 

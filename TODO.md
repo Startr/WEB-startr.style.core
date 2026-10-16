@@ -2,8 +2,42 @@
 
 ## 🚧 High Priority
 
-- [ ] **🔥 Resolve the `--br` shorthand collision** — `src/utilities/_border.css` binds `--br` to both `border-radius` (line 6) and `border-right` (line 10). Because `border-right` is a shorthand and its rule lands after `border: var(--b)` in the built sheet, any element using `--b` + `--br` loses its right border (`border-right-style` resets to `none`). Confirmed live on build.sage.education cards; consumer worked around it by swapping to the `--radius` alias (2026-08-26). Second consumer hit 2026-09-18 — WEB-Sage.is `/plans/sage-ai-office-automation/` authored with `--radius` throughout after the audit; two consumers now route around the same binding. #bug #critical
-  - [ ] Proposed fix (NOT settled — needs team review before shipping): drop the `border-right, --br` binding; keep `--br` = border-radius since every known consumer and doc uses it that way; give border-right a new name (`--b-rt`? `--bri`? mirror across `--bt/--bl/--bb` for a consistent side set?). Renaming is a breaking change for any consumer that used `--br` as border-right — audit first.
-  - [ ] Same review should rule on the sibling dual bindings: `--bs` (border-style vs box-shadow), `--td` (text-decoration vs transition-delay), `--fs` (font-style vs flex-shrink), `--cr` (column-rule vs clear). Value-disjoint today, so they work by luck; each is one valid-in-both value away from a silent failure (`--bs:none` already collides). Consumers are already routing around the DSL: build.sage.education wrote plain `flex-shrink:0` instead of `--fs:0` on 2026-08-27 to dodge the `--fs` pair.
-  - [ ] After the naming call: rebuild and redeploy `startr.style/style.css` — the live sheet carries the collision (border-radius line 823, border-right line 839).
-  - [ ] Decide whether `WEB-Startr.Style/src/static/style.css` should be regenerated from core instead of hand-maintained. Evidence the two forked: `--fs` definition order is flipped between repos, and core has no print (`-pt`) tier while main carries ~120 `-pt` props.
+- [ ] **🔥 `--br` sets border-radius and border-right: a rounded, bordered element loses its right border** #bug #critical — dossier: docs/board-dossiers.md
+  - [x] Workaround: `--radius` is radius-only; props.json flags `--br` as a collision and docs/design-ingest.md routes consumers to `--radius` (2026-10-16)
+  - [x] 1.x keeps the binding: AI-UI (Interface.svelte:431/437/444, Images.svelte:552, ModelEditor.svelte:583), Sage.is hardware/index.njk:285 and Style layout_2.njk:39 use `--br` as border-right (2026-10-16)
+  - [ ] 2.0: keep `--br` = border-radius, rename border-right (`--b-rt`? `--bri`? one side set with `--bt/--bl/--bb`), ship a migration table the manifest lint can name
+  - [ ] Same 2.0 call on `--bs` (border-style/box-shadow), `--td` (text-decoration/transition-delay), `--fs` (font-style/flex-shrink), `--cr` (column-rule/clear); props.json flags all five
+  - [x] Core generates the published sheet (Alexander, 2026-10-16: converge, then extend 1.x); proof: `bun run parity` → PARITY OK against test/fixtures/published-1.3.2.css. Core had the `-pt` tier all along (src/mixins.css)
+
+- [ ] **Publish 1.x from core: built and green here; startr.style still serves the hand-edited 1.3.2** #release
+  - [ ] [MANUALLY] Commit core on a branch (bun.lock adds postcss-selector-parser 7.1.1)
+  - [ ] [MANUALLY] Startr/Style: `make version_snapshot V=1.3.2`, commit it, `make style_core_update`, then `bun install` in src/style-core
+  - [ ] [WE] Startr/Style: `make core_publish` (it refuses until v1.3.2/ holds the tag's bytes; it runs parity before copying)
+  - [ ] [MANUALLY] Netlify: /v1.3.2/style.css redirects to image.startr.cloud (302 on 2026-10-16); fix the rule, then release and deploy
+  - [ ] [MANUALLY] Before the master deploy: WEB-startr links `https://startr.style/startr.css`, which disappears (cfa8051 deleted src/style-core/dist/)
+  - [ ] [WE] Trellis re-pins (`make kit_fetch`), then re-cuts its design drafts (Trellis TODO.md, design-drafts card)
+
+## 📋 Backlog
+
+- [ ] **Size: the 1.x extension costs +2.35 KB gzip against a 2 KB budget** (11.65 → 14.0 KB, both minified by cssnano, 2026-10-16); no size gate yet
+  - [ ] Levers: helper focus copies −200 B, in-hover focus copies −92 B, `--bgc`/`--bc` states −140 B, `--cur` hover −12 B; the focus copies serve keyboard users
+- [ ] **Dark mode: core's neutral #1F/#E6 against the published blue-black** — 1.x keeps the published values; switching restyles every consumer's dark mode (decision)
+- [ ] `--grad-top` reads `var(--grad-bottom)` (src/utilities/_background.css:11; the published sheet's line 797 too) #bug
+- [ ] Reduced motion: a spinner on `--anim` freezes (essential-motion opt-out?); `--sb` smooth scroll still animates
+- [ ] `--bdf` ships no `-webkit-backdrop-filter` (autoprefixer targets); Safari before 18 needs it
+- [ ] `--mix`/`--tone` hue guards rely on Chrome's powerless-hue rule; test in Safari and Firefox
+- [ ] No `:focus-within` state: a card holding a focused link shows nothing (the runbook says to make the link the card)
+- [ ] Tier plus state names (`--bg-hover-md`) are not modelled; the manifest warns `combo-name`
+- [ ] Ingest: flag hex inside inline `style` attributes; turn `MANIFEST_STRICT` on by default
+- [ ] CI: run `bun test scripts` and `bun run parity` in .github/workflows (builddist.yml only builds)
+- [ ] snapshot-version.sh pins no props.json, and `make release` skips `version_snapshot` (both in Startr/Style)
+- [ ] src/base/_links.css is imported by no build and holds SCSS-isms; prune it
+
+## ✅ Done
+
+- [x] **1.x extension: states, motion, colour by math, effects, manifest, parity, ingest runbook** (2026-10-16) — proof: `bun test scripts` 670 pass, 1 skip, 0 fail (8 suites); `bun run parity` PARITY OK
+  - [x] build.ts combines media queries in their own pass (every tier rule had shipped as a literal `$(var)-sm`)
+  - [x] States `-hover`, `-focus`, `-active`, `-on`, `-in-on`, `-in-hover` on the paint set; the ladder is held by scripts/bands.test.ts
+  - [x] `--anim`, the st-* keyframes and the reduced-motion guard; `--text-grad`, `--bdf`, `--glow`; `--button-hover` wired
+  - [x] Colour by math: `--mix`, `--tone`; the 245-token palette is gone (−1.6 KB gzip); 216 cells within 2.3e-5
+  - [x] props.json and its test; docs/design-ingest.md; `bun run ingest`

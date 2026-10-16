@@ -9,13 +9,13 @@
   - [ ] Same 2.0 call on `--bs` (border-style/box-shadow), `--td` (text-decoration/transition-delay), `--fs` (font-style/flex-shrink), `--cr` (column-rule/clear); props.json flags all five
   - [x] Core generates the published sheet (Alexander, 2026-10-16: converge, then extend 1.x); proof: `bun run parity` → PARITY OK against test/fixtures/published-1.3.2.css. Core had the `-pt` tier all along (src/mixins.css)
 
-- [ ] **Publish 1.x from core: built and green here; startr.style still serves the hand-edited 1.3.2** #release
-  - [ ] [MANUALLY] Commit core on a branch (bun.lock adds postcss-selector-parser 7.1.1)
-  - [ ] [MANUALLY] Startr/Style: `make version_snapshot V=1.3.2`, commit it, `make style_core_update`, then `bun install` in src/style-core
-  - [ ] [WE] Startr/Style: `make core_publish` (it refuses until v1.3.2/ holds the tag's bytes; it runs parity before copying)
-  - [ ] [MANUALLY] Netlify: /v1.3.2/style.css redirects to image.startr.cloud (302 on 2026-10-16); fix the rule, then release and deploy
-  - [ ] [MANUALLY] Before the master deploy: WEB-startr links `https://startr.style/startr.css`, which disappears (cfa8051 deleted src/style-core/dist/)
-  - [ ] [WE] Trellis re-pins (`make kit_fetch`), then re-cuts its design drafts (Trellis TODO.md, design-drafts card)
+- [ ] **Publish 1.x from core: 1.4.0 is live (2026-10-16); the pinned /v*/ URLs wait on a Cloudflare rule** #release
+  - [x] Core merged to master through PR #1 (e027981, 2026-10-16)
+  - [x] Startr/Style: 1.3.2 pinned as served, subtree pulled, `bun install` in src/style-core (2026-10-16)
+  - [x] Startr/Style: `make core_publish`, release v1.4.0, deploy; live /style.css b845cff…, /props.json, /startr.css (2026-10-16)
+  - [ ] [MANUALLY] Cloudflare, not Netlify: a redirect rule on the startr.style zone sends /v1.3.2/ and /v1.4.0/ to image.startr.cloud; narrow it to numeric WxH (Startr/Style TODO.md)
+  - [x] `/startr.css` kept: `make core_publish` writes it into static/ (2026-10-16)
+  - [x] Trellis vendors 1.4.0, pinned by hash, and lints template props (feature/frontend-ux a27f6c3, 2026-10-16); the re-cut follows there
 
 ## 📋 Backlog
 
@@ -30,6 +30,7 @@
 - [ ] Tier plus state names (`--bg-hover-md`) are not modelled; the manifest warns `combo-name`
 - [ ] Ingest: flag hex inside inline `style` attributes; turn `MANIFEST_STRICT` on by default
 - [ ] CI: run `bun test scripts` and `bun run parity` in .github/workflows (builddist.yml only builds)
+- [ ] CI: builddist.yml cannot push dist/ (403: the workflow token lacks contents:write, failing since 2026-08); grant it or drop the auto-commit, which also commits as a stale author
 - [ ] snapshot-version.sh pins no props.json, and `make release` skips `version_snapshot` (both in Startr/Style)
 - [ ] src/base/_links.css is imported by no build and holds SCSS-isms; prune it
 

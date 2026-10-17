@@ -11,6 +11,7 @@
 
 - [ ] **Publish 1.x from core: 1.4.0 is live (2026-10-16); the pinned /v*/ URLs wait on a Cloudflare rule** #release
   - [x] 1.4.1 hotfix (2026-10-17): `button:hover` outranked a consumer's class reset and painted AI-UI's transparent icon buttons solid `--primary`; now `:where(button, …):hover` at one class of specificity. Found by the 1.4.0 regression run, not by the tests
+  - [x] 1.4.2 (2026-10-17): 1.4.1 still outranked Tailwind's preflight (`button { background-color: transparent }`); each hover selector now carries its base rule's specificity (`button:where(:hover)`); checked against AI-UI's real pages with `probe:hover --sheet` before release
   - [x] Core merged to master through PR #1 (e027981, 2026-10-16)
   - [x] Startr/Style: 1.3.2 pinned as served, subtree pulled, `bun install` in src/style-core (2026-10-16)
   - [x] Startr/Style: `make core_publish`, release v1.4.0, deploy; live /style.css b845cff…, /props.json, /startr.css (2026-10-16)

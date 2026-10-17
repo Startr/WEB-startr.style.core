@@ -388,6 +388,8 @@ Footguns:
 - The effect helpers' hover twins (`--shadow-hover`, `--levitate-hover`, the `--translate-hover` family) are not `!important`, so a `--boxs` or `--t` on the same element wins and the hover never shows. Workaround: do not mix the two families on one element. Fix: a lint, on core's `TODO.md`.
 - `--x-in-on` never fires under `:checked`: inputs have no children. Workaround: put `--x-on` on the input itself, or make the state an attribute on a parent (`data-on`).
 - `--gutter-sm` to `--gutter-xl` are never defined, so the `.wrapper` tier gutters do nothing. Workaround: set the padding with `--px` and its tiers. Fix: on core's `TODO.md`.
+- `--inset` takes ONE value and writes it to all four sides; it is not CSS's four-value `inset` shorthand, and it has no tiers. `--inset:auto 0 0 0` is invalid and dropped, so a fixed element stays at its static position. Workaround: `--top`, `--right`, `--bottom`, `--left`, which take values and tiers. Fix: a four-value form, or a lint on multi-value `--inset`, on core's `TODO.md`.
+- The kit's root font-size is 15px, so `rem` geometry drifts from a script's px: `4.75rem` is 71px, not 76. Write a component's geometry in the unit its script uses.
 
 ## Commands cheat-sheet
 

@@ -21,6 +21,7 @@
 
 ## 📋 Backlog
 
+- [ ] **`--text-muted` and `--text-bright` fail AA on white** (Lighthouse on Trellis, 2026-10-17): muted is black 40% (~#a8a8a8, 2.4:1), bright is 60% (~#7d7d7d, 4.0:1), under 4.5:1 for small text; consumers now write `color-mix(in srgb, var(--text-main) 70%, var(--background))` (~5.7:1) by hand. Decide: recalibrate the tokens (every consumer's look shifts) or ship a `--text-dim` at 70%
 - [ ] **Hover gate in consumer CI**: run `bun run probe:hover <url> --login …` against AI-UI's chat shell and admin settings (and Trellis's pages) before a kit release; the 1.4.0 button regression went live because no check forced hover on real pages. The probe takes 4 s a page
 - [ ] **Lint two silent pairings** (ingest and Trellis kit_lint): `--text-grad` with a `--bg-*` state (the shorthand resets background-clip, so the text vanishes on hover or on), and a `*-hover` effect helper with `--boxs`/`--t` on one element (the helper is not `!important` and never shows)
 - [ ] `--gutter-sm..xl` are never defined (src/helpers/_layout.css:12-21), so the `.wrapper` tier gutters do nothing

@@ -19,6 +19,8 @@
 
 ## 📋 Backlog
 
+- [ ] **Lint two silent pairings** (ingest and Trellis kit_lint): `--text-grad` with a `--bg-*` state (the shorthand resets background-clip, so the text vanishes on hover or on), and a `*-hover` effect helper with `--boxs`/`--t` on one element (the helper is not `!important` and never shows)
+- [ ] `--gutter-sm..xl` are never defined (src/helpers/_layout.css:12-21), so the `.wrapper` tier gutters do nothing
 - [ ] **Size: the 1.x extension costs +2.35 KB gzip against a 2 KB budget** (11.65 → 14.0 KB, both minified by cssnano, 2026-10-16); no size gate yet
   - [ ] Levers: helper focus copies −200 B, in-hover focus copies −92 B, `--bgc`/`--bc` states −140 B, `--cur` hover −12 B; the focus copies serve keyboard users
 - [ ] **Dark mode: core's neutral #1F/#E6 against the published blue-black** — 1.x keeps the published values; switching restyles every consumer's dark mode (decision)

@@ -390,6 +390,9 @@ Footguns:
 - `--gutter-sm` to `--gutter-xl` are never defined, so the `.wrapper` tier gutters do nothing. Workaround: set the padding with `--px` and its tiers. Fix: on core's `TODO.md`.
 - `--inset` takes ONE value and writes it to all four sides; it is not CSS's four-value `inset` shorthand, and it has no tiers. `--inset:auto 0 0 0` is invalid and dropped, so a fixed element stays at its static position. Workaround: `--top`, `--right`, `--bottom`, `--left`, which take values and tiers. Fix: a four-value form, or a lint on multi-value `--inset`, on core's `TODO.md`.
 - The kit's root font-size is 15px, so `rem` geometry drifts from a script's px: `4.75rem` is 71px, not 76. Write a component's geometry in the unit its script uses.
+- The kit sizes every `svg` at `height: 1.2em`, over the element's own `height` attribute. Under a small `--size` an icon shrinks with the label: a 22px icon beside a `.68rem` label renders at 12px. Workaround: `--h:22px` on the icon. Fix: on core's `TODO.md`.
+- The kit dresses `<details>` as a card (margin, border, background, side padding) and `<summary>` as a button (background, padding, border, `width:100%`, `outline:none`). A disclosure that is neither resets both: `--m:0; --b:0; --bg:transparent; --radius:0`, plus `--px:0` on the details and `--p:0` on the summary. The state prop `--oe-focus` still wins over that `outline:none`.
+- An overlay above a control eats its taps: a decorative element with no `--pe:none` is what `elementFromPoint` returns, and `closest("a")` finds nothing. Every decorative overlay gets `--pe:none`.
 
 ## Commands cheat-sheet
 

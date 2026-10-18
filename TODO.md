@@ -9,12 +9,13 @@
   - [ ] Same 2.0 call on `--bs` (border-style/box-shadow), `--td` (text-decoration/transition-delay), `--fs` (font-style/flex-shrink), `--cr` (column-rule/clear); props.json flags all five
   - [x] Core generates the published sheet (Alexander, 2026-10-16: converge, then extend 1.x); proof: `bun run parity` → PARITY OK against test/fixtures/published-1.3.2.css. Core had the `-pt` tier all along (src/mixins.css)
 
-- [ ] **Kit 1.5.0: text contrast, svg height, dark-mode button text, two probes** #release — branch `feat/kit-1.5-probes`, PR open, not released
+- [ ] **Kit 1.5.0: text contrast, svg height, dark-mode button text, two probes** #release — merged to master (PR #12, 0d32f1f), not released
   - [x] Light `--text-bright` is 64% black (was 60%): 4.1:1 to 4.67:1 on `--background` (Lighthouse on Trellis, 2026-10-17); `--text-muted` and the dark values untouched; `scripts/color.test.ts` computes the contrast
   - [x] `svg { height: 1.2em }` is now `svg:where(:not([height]))`: an svg with a height attribute keeps it; `:where()` holds the specificity at one element, so a consumer's `svg { height }` still wins
   - [x] Button text reads `--button-text` (`--color-7`), not `--white`: white on `--primary` in dark mode (was about 1.5:1); `.black` gets `--btn-c: var(--white)` so it keeps flipping; `scripts/button-text.test.ts`
   - [x] `probe:tap <url> <selector> --expect <css>` (one real touch tap) and `probe:diff <url> --sheet <css>` (box, colour, font-size, display against the live kit)
-  - [ ] Before release: `probe:hover` and `probe:diff --sheet` on AI-UI, Trellis, Sage.is and Startr.cloud; read the diff list with Alexander
+  - [x] Before release (2026-10-18): `probe:hover` 0 unasked on AI-UI's chat and settings and a Trellis lead; `probe:diff --sheet` changes only form and `<summary>` text, `#7d7d7d`→`#747474` (AI-UI 3, Trellis 1/28/2); Sage.is noise only
+    - Trellis needs a candidate with its fonts inlined (as `scripts/vendor_kit.py` does): the raw sheet's `@import url('/fonts/…')` 404s on a consumer host and every text box resizes, which reads as 1,500 changes
   - [ ] Release: git-flow `release/1.5.0`, `make core_publish`, `make version_snapshot V=1.5.0` (Startr/Style)
 
 - [ ] [MANUALLY] **Narrow the Cloudflare image rule** #release: Cloudflare, not Netlify: a redirect rule on the startr.style zone sends /v1.3.2/ and /v1.4.0/ to image.startr.cloud; narrow it to numeric WxH (Startr/Style TODO.md)

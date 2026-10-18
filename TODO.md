@@ -9,17 +9,26 @@
   - [ ] Same 2.0 call on `--bs` (border-style/box-shadow), `--td` (text-decoration/transition-delay), `--fs` (font-style/flex-shrink), `--cr` (column-rule/clear); props.json flags all five
   - [x] Core generates the published sheet (Alexander, 2026-10-16: converge, then extend 1.x); proof: `bun run parity` → PARITY OK against test/fixtures/published-1.3.2.css. Core had the `-pt` tier all along (src/mixins.css)
 
+- [ ] **Kit 1.5.0: text contrast, svg height, dark-mode button text, two probes** #release — branch `feat/kit-1.5-probes`, PR open, not released
+  - [x] Light `--text-bright` is 64% black (was 60%): 4.1:1 to 4.67:1 on `--background` (Lighthouse on Trellis, 2026-10-17); `--text-muted` and the dark values untouched; `scripts/color.test.ts` computes the contrast
+  - [x] `svg { height: 1.2em }` is now `svg:where(:not([height]))`: an svg with a height attribute keeps it; `:where()` holds the specificity at one element, so a consumer's `svg { height }` still wins
+  - [x] Button text reads `--button-text` (`--color-7`), not `--white`: white on `--primary` in dark mode (was about 1.5:1); `.black` gets `--btn-c: var(--white)` so it keeps flipping; `scripts/button-text.test.ts`
+  - [x] `probe:tap <url> <selector> --expect <css>` (one real touch tap) and `probe:diff <url> --sheet <css>` (box, colour, font-size, display against the live kit)
+  - [ ] Before release: `probe:hover` and `probe:diff --sheet` on AI-UI, Trellis, Sage.is and Startr.cloud; read the diff list with Alexander
+  - [ ] Release: git-flow `release/1.5.0`, `make core_publish`, `make version_snapshot V=1.5.0` (Startr/Style)
+
 - [ ] [MANUALLY] **Narrow the Cloudflare image rule** #release: Cloudflare, not Netlify: a redirect rule on the startr.style zone sends /v1.3.2/ and /v1.4.0/ to image.startr.cloud; narrow it to numeric WxH (Startr/Style TODO.md)
 
 ## 📋 Backlog
 
-- [ ] **`--text-muted` and `--text-bright` fail AA on white** (Lighthouse on Trellis, 2026-10-17): muted is black 40% (~#a8a8a8, 2.4:1), bright is 60% (~#7d7d7d, 4.0:1), under 4.5:1 for small text
-  - Consumers now write `color-mix(in srgb, var(--text-main) 70%, var(--background))` (~5.7:1) by hand.
-  - [ ] Decide: recalibrate the tokens (every consumer's look shifts) or ship a `--text-dim` at 70%
-- [ ] **Hover gate in consumer CI**: run `bun run probe:hover <url> --login …` against AI-UI's chat shell and admin settings (and Trellis's pages) before a kit release; the 1.4.0 button regression went live because no check forced hover on real pages. The probe takes 4 s a page
+- [ ] **Probe gate in consumer CI**: `probe:hover` (4 s a page), `probe:tap` and `probe:diff --sheet` exist; none runs in CI yet. The 1.4.0 button regression went live because nothing forced hover on a real page
+  - [ ] Run them against AI-UI's chat shell and admin settings, Trellis's pages, Sage.is and Startr.cloud before every kit release (`--login`, `--cookie` for a Django session)
+- [ ] **Three more fills still read `var(--white)` and invert in dark mode** (found with the 1.5.0 button-text test)
+  - [ ] `.tag` text (`--tag-c`, src/base/_forms.css:253) and `.accent.primary` and friends (`--accent-c`, `--text-c`, src/base/_utilities.css:77): dark text on a `--primary` fill, as buttons had
+  - [ ] `.grey` button in dark mode: `--grey` fill is light and `--btn-c` is `--text-main`, also light, about 1.5:1 (older than 1.5.0)
+  - [ ] `footer` reads `--text-muted` (src/base/_misc.css:20), about 2.4:1: meaningful text, not disabled or decorative
 - [ ] **Lint two silent pairings** (ingest and Trellis kit_lint): `--text-grad` with a `--bg-*` state (the shorthand resets background-clip, so the text vanishes on hover or on), and a `*-hover` effect helper with `--boxs`/`--t` on one element (the helper is not `!important` and never shows)
 - [ ] `--gutter-sm..xl` are never defined (src/helpers/_layout.css:12-21), so the `.wrapper` tier gutters do nothing
-- [ ] `svg { height: 1.2em }` (base) overrides an svg's own height attribute, so icons shrink under a small `--size`; decide: drop it, or scope it to inline icons without a height
 - [ ] `--inset` takes one value for all four sides and has no tiers (src/helpers/_position.css); a four-value `--inset:auto 0 0 0` is silently dropped. Give it the shorthand, or make ingest and kit_lint flag a multi-value `--inset`
 - [ ] **Size: the 1.x extension costs +2.35 KB gzip against a 2 KB budget** (11.65 → 14.0 KB, both minified by cssnano, 2026-10-16); no size gate yet
   - [ ] Levers: helper focus copies −200 B, in-hover focus copies −92 B, `--bgc`/`--bc` states −140 B, `--cur` hover −12 B; the focus copies serve keyboard users

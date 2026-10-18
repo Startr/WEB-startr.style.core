@@ -9,7 +9,7 @@
   - [ ] Same 2.0 call on `--bs` (border-style/box-shadow), `--td` (text-decoration/transition-delay), `--fs` (font-style/flex-shrink), `--cr` (column-rule/clear); props.json flags all five
   - [x] Core generates the published sheet (Alexander, 2026-10-16: converge, then extend 1.x); proof: `bun run parity` → PARITY OK against test/fixtures/published-1.3.2.css. Core had the `-pt` tier all along (src/mixins.css)
 
-- [ ] **Kit 1.5.0: text contrast, svg height, dark-mode button text, two probes** #release — merged to master (PR #12, 0d32f1f), not released
+- [x] **Kit 1.5.0: text contrast, svg height, dark-mode button text, two probes** #release — LIVE 2026-10-18 (Startr/Style v1.5.0, /style.css 0d869303…); `probe:hover` on AI-UI live: 0 unasked
   - [x] Light `--text-bright` is 64% black (was 60%): 4.1:1 to 4.67:1 on `--background` (Lighthouse on Trellis, 2026-10-17); `--text-muted` and the dark values untouched; `scripts/color.test.ts` computes the contrast
   - [x] `svg { height: 1.2em }` is now `svg:where(:not([height]))`: an svg with a height attribute keeps it; `:where()` holds the specificity at one element, so a consumer's `svg { height }` still wins
   - [x] Button text reads `--button-text` (`--color-7`), not `--white`: white on `--primary` in dark mode (was about 1.5:1); `.black` gets `--btn-c: var(--white)` so it keeps flipping; `scripts/button-text.test.ts`

@@ -10,7 +10,7 @@
   - [x] Core generates the published sheet (Alexander, 2026-10-16: converge, then extend 1.x); proof: `bun run parity` → PARITY OK against test/fixtures/published-1.3.2.css. Core had the `-pt` tier all along (src/mixins.css)
 
 - [ ] **Kit 1.5.0: text contrast, svg height, dark-mode button text, two probes** #release — branch `feat/kit-1.5-probes`, PR open, not released
-  - [x] Light `--text-bright` is 64% black (was 60%): 4.0:1 to 4.67:1 on `--background` (Lighthouse on Trellis, 2026-10-17); `--text-muted` and the dark values untouched; `scripts/color.test.ts` computes the contrast
+  - [x] Light `--text-bright` is 64% black (was 60%): 4.1:1 to 4.67:1 on `--background` (Lighthouse on Trellis, 2026-10-17); `--text-muted` and the dark values untouched; `scripts/color.test.ts` computes the contrast
   - [x] `svg { height: 1.2em }` is now `svg:where(:not([height]))`: an svg with a height attribute keeps it; `:where()` holds the specificity at one element, so a consumer's `svg { height }` still wins
   - [x] Button text reads `--button-text` (`--color-7`), not `--white`: white on `--primary` in dark mode (was about 1.5:1); `.black` gets `--btn-c: var(--white)` so it keeps flipping; `scripts/button-text.test.ts`
   - [x] `probe:tap <url> <selector> --expect <css>` (one real touch tap) and `probe:diff <url> --sheet <css>` (box, colour, font-size, display against the live kit)

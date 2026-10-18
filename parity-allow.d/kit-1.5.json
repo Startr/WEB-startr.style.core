@@ -5,7 +5,7 @@
     "media": "^$",
     "prop": "^--text-bright$",
     "value": "64%",
-    "reason": "Kit 1.5.0. The light --text-bright mixes 64% --black into --white instead of 60%: 4.67:1 on --background, over the 4.5:1 AA line (P's was about 4.0:1, a Lighthouse failure on Trellis). It also darkens --form-text, which reads it. The dark value and --text-muted are unchanged. scripts/color.test.ts computes the contrast from the source and from the built sheet."
+    "reason": "Kit 1.5.0. The light --text-bright mixes 64% --black into --white instead of 60%: 4.67:1 on --background, over the 4.5:1 AA line (P's was about 4.1:1, a Lighthouse failure on Trellis). It also darkens --form-text, which reads it. The dark value and --text-muted are unchanged. scripts/color.test.ts computes the contrast from the source and from the built sheet."
   },
   {
     "kind": "extra",

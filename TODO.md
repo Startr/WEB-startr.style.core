@@ -9,19 +9,13 @@
   - [ ] Same 2.0 call on `--bs` (border-style/box-shadow), `--td` (text-decoration/transition-delay), `--fs` (font-style/flex-shrink), `--cr` (column-rule/clear); props.json flags all five
   - [x] Core generates the published sheet (Alexander, 2026-10-16: converge, then extend 1.x); proof: `bun run parity` → PARITY OK against test/fixtures/published-1.3.2.css. Core had the `-pt` tier all along (src/mixins.css)
 
-- [ ] **Publish 1.x from core: 1.4.0 is live (2026-10-16); the pinned /v*/ URLs wait on a Cloudflare rule** #release
-  - [x] 1.4.1 hotfix (2026-10-17): `button:hover` outranked a consumer's class reset and painted AI-UI's transparent icon buttons solid `--primary`; now `:where(button, …):hover` at one class of specificity. Found by the 1.4.0 regression run, not by the tests
-  - [x] 1.4.2 (2026-10-17): 1.4.1 still outranked Tailwind's preflight (`button { background-color: transparent }`); each hover selector now carries its base rule's specificity (`button:where(:hover)`); checked against AI-UI's real pages with `probe:hover --sheet` before release
-  - [x] Core merged to master through PR #1 (e027981, 2026-10-16)
-  - [x] Startr/Style: 1.3.2 pinned as served, subtree pulled, `bun install` in src/style-core (2026-10-16)
-  - [x] Startr/Style: `make core_publish`, release v1.4.0, deploy; live /style.css b845cff…, /props.json, /startr.css (2026-10-16)
-  - [ ] [MANUALLY] Cloudflare, not Netlify: a redirect rule on the startr.style zone sends /v1.3.2/ and /v1.4.0/ to image.startr.cloud; narrow it to numeric WxH (Startr/Style TODO.md)
-  - [x] `/startr.css` kept: `make core_publish` writes it into static/ (2026-10-16)
-  - [x] Trellis vendors 1.4.0, pinned by hash, and lints template props (feature/frontend-ux a27f6c3, 2026-10-16); the re-cut follows there
+- [ ] [MANUALLY] **Narrow the Cloudflare image rule** #release: Cloudflare, not Netlify: a redirect rule on the startr.style zone sends /v1.3.2/ and /v1.4.0/ to image.startr.cloud; narrow it to numeric WxH (Startr/Style TODO.md)
 
 ## 📋 Backlog
 
-- [ ] **`--text-muted` and `--text-bright` fail AA on white** (Lighthouse on Trellis, 2026-10-17): muted is black 40% (~#a8a8a8, 2.4:1), bright is 60% (~#7d7d7d, 4.0:1), under 4.5:1 for small text; consumers now write `color-mix(in srgb, var(--text-main) 70%, var(--background))` (~5.7:1) by hand. Decide: recalibrate the tokens (every consumer's look shifts) or ship a `--text-dim` at 70%
+- [ ] **`--text-muted` and `--text-bright` fail AA on white** (Lighthouse on Trellis, 2026-10-17): muted is black 40% (~#a8a8a8, 2.4:1), bright is 60% (~#7d7d7d, 4.0:1), under 4.5:1 for small text
+  - Consumers now write `color-mix(in srgb, var(--text-main) 70%, var(--background))` (~5.7:1) by hand.
+  - [ ] Decide: recalibrate the tokens (every consumer's look shifts) or ship a `--text-dim` at 70%
 - [ ] **Hover gate in consumer CI**: run `bun run probe:hover <url> --login …` against AI-UI's chat shell and admin settings (and Trellis's pages) before a kit release; the 1.4.0 button regression went live because no check forced hover on real pages. The probe takes 4 s a page
 - [ ] **Lint two silent pairings** (ingest and Trellis kit_lint): `--text-grad` with a `--bg-*` state (the shorthand resets background-clip, so the text vanishes on hover or on), and a `*-hover` effect helper with `--boxs`/`--t` on one element (the helper is not `!important` and never shows)
 - [ ] `--gutter-sm..xl` are never defined (src/helpers/_layout.css:12-21), so the `.wrapper` tier gutters do nothing
@@ -43,6 +37,15 @@
 - [ ] src/base/_links.css is imported by no build and holds SCSS-isms; prune it
 
 ## ✅ Done
+
+- [x] **Publish 1.x from core: 1.4.2 is live (2026-10-17)** #release — 1.4.0 shipped 2026-10-16, then two `button:hover` hotfixes; the pinned /v*/ URLs wait on the Cloudflare card above
+  - [x] 1.4.1 hotfix (2026-10-17): `button:hover` outranked a consumer's class reset and painted AI-UI's transparent icon buttons solid `--primary`; now `:where(button, …):hover` at one class of specificity. Found by the 1.4.0 regression run, not by the tests
+  - [x] 1.4.2 (2026-10-17): 1.4.1 still outranked Tailwind's preflight (`button { background-color: transparent }`); each hover selector now carries its base rule's specificity (`button:where(:hover)`); checked against AI-UI's real pages with `probe:hover --sheet` before release
+  - [x] Core merged to master through PR #1 (e027981, 2026-10-16)
+  - [x] Startr/Style: 1.3.2 pinned as served, subtree pulled, `bun install` in src/style-core (2026-10-16)
+  - [x] Startr/Style: `make core_publish`, release v1.4.0, deploy; live /style.css b845cff…, /props.json, /startr.css (2026-10-16)
+  - [x] `/startr.css` kept: `make core_publish` writes it into static/ (2026-10-16)
+  - [x] Trellis vendors 1.4.0, pinned by hash, and lints template props (feature/frontend-ux a27f6c3, 2026-10-16); the re-cut follows there
 
 - [x] **1.x extension: states, motion, colour by math, effects, manifest, parity, ingest runbook** (2026-10-16) — proof: `bun test scripts` 670 pass, 1 skip, 0 fail (8 suites); `bun run parity` PARITY OK
   - [x] build.ts combines media queries in their own pass (every tier rule had shipped as a literal `$(var)-sm`)

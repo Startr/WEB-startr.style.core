@@ -16,7 +16,7 @@
   - [x] `probe:tap <url> <selector> --expect <css>` (one real touch tap) and `probe:diff <url> --sheet <css>` (box, colour, font-size, display against the live kit)
   - [x] Before release (2026-10-18): `probe:hover` 0 unasked on AI-UI's chat and settings and a Trellis lead; `probe:diff --sheet` changes only form and `<summary>` text, `#7d7d7d`→`#747474` (AI-UI 3, Trellis 1/28/2); Sage.is noise only
     - Trellis needs a candidate with its fonts inlined (as `scripts/vendor_kit.py` does): the raw sheet's `@import url('/fonts/…')` 404s on a consumer host and every text box resizes, which reads as 1,500 changes
-  - [ ] Release: git-flow `release/1.5.0`, `make core_publish`, `make version_snapshot V=1.5.0` (Startr/Style)
+  - [x] Release: git-flow `release/1.5.0`, `make core_publish`, `make version_snapshot V=1.5.0` (Startr/Style); LIVE 2026-10-18
 
 - [ ] [MANUALLY] **Narrow the Cloudflare image rule** #release: Cloudflare, not Netlify: a redirect rule on the startr.style zone sends /v1.3.2/ and /v1.4.0/ to image.startr.cloud; narrow it to numeric WxH (Startr/Style TODO.md)
 

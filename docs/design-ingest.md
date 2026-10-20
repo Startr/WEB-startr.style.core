@@ -110,7 +110,7 @@ Checked in a real browser on 2026-10-16:
 - Run `bun install` once per clone.
 - Lint against the manifest for the sheet the page will ship with.
 - Build a manifest from a consumer's vendored sheet to see what it can use today. Use the manifest block in Commands.
-- The Trellis vendored 1.x sheet has 160 props, no states and no `--anim`. That consumer cannot use `--bg-hover` until a release ships and it re-pins.
+- Trellis vendors kit 1.4.2 (`KIT_VERSION` in its `scripts/vendor_kit.py`), which has states. Build the manifest from its vendored sheet to see which props that pin supports. A prop newer than the pin needs a release and a re-pin first.
 
 ### 1 Capture [WE]
 
@@ -299,7 +299,7 @@ becomes `--t:translateX(100%); --t-md:none`. The 719px breakpoint snaps to 768px
 - Run `bun run ingest` on the re-cut page or lint its inline props against `props.json`. The lint findings should be empty.
 - As of 2026-10-16 the ingest lint does not flag a hex inside a `style` attribute. Run the flags grep from Commands on the re-cut page too. The only hex it should find is a fallback in `var(--toned, #hex)` or `var(--mixed, #hex)`. It should find no `class="` and no absolute URL.
 - Run the consumer's gates from its `AGENTS.md`.
-- Run Trellis's `make kit_check`. It checks that the pins match and that the vendored kit has no `@import` and no off-origin `url()`. A props lint inside it is planned.
+- Run Trellis's `make kit_check`. It checks that the pins match and that the vendored kit has no `@import` and no off-origin `url()`. It also lints template props against `props.json`.
 - Compare the re-cut page with the draft screenshots at phone and desktop widths through CDP device metrics.
 - Turn touch off for hover checks.
 - Check hover and keyboard focus with Tab.
@@ -322,7 +322,7 @@ becomes `--t:translateX(100%); --t-md:none`. The 719px breakpoint snaps to 768px
 - [WE] Add a sub-checklist to the card.
 - [WE] Put bucket counts, decisions and proposals in the sub-checklist or a file under the consumer's `docs/` linked from the card.
 - [WE] Give an upstream proposal its own card. Record the approval, gzip delta and release it waits on.
-- [MANUALLY] Commit, push and release. Agents never run git writes.
+- [MANUALLY] Say go for the commit, push and release; agents run git writes only on that go (see the Shared rules in `AGENTS.md`).
 
 ## Naming and precedence rules for new props
 

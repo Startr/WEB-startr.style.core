@@ -1,6 +1,6 @@
 {
   "name": "Startr.Style",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "description": "Largely classless, blazing fast and super light-weight. Startr.Style, a base CSS framework for modern browsers",
   "main": "dist/Startr.Style.min.css",
   "scripts": {

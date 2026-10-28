@@ -22,6 +22,12 @@
 
 ## 📋 Backlog
 
+- [ ] **Print and `hidden` gaps found building certificates on build.sage.education** #footgun — consumer workarounds live in WEB-build.sage.education `src/_includes/component/style.njk` and `src/certificate.njk` (2026-10-27)
+  - [ ] `[hidden]` loses to an inline `--d` (`display: var(--d) !important`) and to the kit's own `button` display, so `el.hidden = true` shows the element. Ship `[hidden] { display: none !important }` in base, after the utilities
+  - [ ] No `@page` support, and `@page` cannot sit in `@scope`. Add `@mixin svar page, --page;` plus one named rule `@page startr-sheet { margin: 0 }`, so a page opts in with `--page:startr-sheet` and its own `--p-pt`
+  - [ ] No `print-color-adjust` prop. Add `@mixin svar print-color-adjust, --pca;` so a consumer can keep a background in print on purpose
+  - [ ] Gate: run `bun run parity` and `bun test scripts`, and check the size budget (all three together cost well under 200 B gzip)
+
 - [ ] **Probe gate in consumer CI**: `probe:hover` (4 s a page), `probe:tap` and `probe:diff --sheet` exist; none runs in CI yet. The 1.4.0 button regression went live because nothing forced hover on a real page
   - [ ] Run them against AI-UI's chat shell and admin settings, Trellis's pages, Sage.is and Startr.cloud before every kit release (`--login`, `--cookie` for a Django session)
 - [ ] **Three more fills still read `var(--white)` and invert in dark mode** (found with the 1.5.0 button-text test)
